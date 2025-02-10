@@ -9,11 +9,15 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config struct of the API.
 type Config struct {
 	Datasources datasources.Config `mapstructure:"datasources"`
 	Router      http.Config        `mapstructure:"router"`
 }
 
+// Load API configuration using the provided path.
+// This function auto-detect config.yaml file in the provided repository.
+// This function override config file with environnement variables.
 func Load(path, prefix string) (*Config, error) {
 	config := new(Config)
 

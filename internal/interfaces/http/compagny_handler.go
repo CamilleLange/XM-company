@@ -10,16 +10,19 @@ import (
 	"go.uber.org/zap"
 )
 
+// CompagnyHandler for the compagny feature.
 type CompagnyHandler struct {
 	compagnyFeatures compagny.CompagnyFeatures
 }
 
+// NewCompagnyHandler is a factory method for the CompagnyHandler type.
 func NewCompagnyHandler(compagnyFeatures compagny.CompagnyFeatures) *CompagnyHandler {
 	return &CompagnyHandler{
 		compagnyFeatures: compagnyFeatures,
 	}
 }
 
+// RegisterRoutes for the CompagnyHangler, provide a ready *gin.Engine.
 func (h *CompagnyHandler) RegisterRoutes(router *gin.Engine) {
 	router.POST("/compagny", h.Post)
 	router.GET("/compagny/:compagny_uuid", h.Get)
@@ -28,6 +31,7 @@ func (h *CompagnyHandler) RegisterRoutes(router *gin.Engine) {
 	router.DELETE("/compagny/:compagny_uuid", h.Delete)
 }
 
+// Post parse the HTTP request in order to create the compagny.
 func (h *CompagnyHandler) Post(c *gin.Context) {
 	var compagny compagny.CompagnyCreateDTO
 	if err := c.ShouldBindJSON(&compagny); err != nil {
@@ -54,6 +58,7 @@ func (h *CompagnyHandler) Post(c *gin.Context) {
 	c.JSON(http.StatusCreated, compagnyUUID)
 }
 
+// Get parse the HTTP request in order to respond the requested Compagny.
 func (h *CompagnyHandler) Get(c *gin.Context) {
 	var compagnyUUID uuid.UUID
 	if err := ginparamsmapper.GetPathParamFromContext("compagny_uuid", c, &compagnyUUID); err != nil {
@@ -72,6 +77,7 @@ func (h *CompagnyHandler) Get(c *gin.Context) {
 	c.JSON(http.StatusOK, compagny)
 }
 
+// GetAll parse the HTTP request in order to respond with all Compagnies.
 func (h *CompagnyHandler) GetAll(c *gin.Context) {
 	compagny, err := h.compagnyFeatures.ReadAll()
 	if err != nil {
@@ -89,6 +95,7 @@ func (h *CompagnyHandler) GetAll(c *gin.Context) {
 	}
 }
 
+// Put parse the HTTP request in order to update the requested Compagny.
 func (h *CompagnyHandler) Put(c *gin.Context) {
 	var compagnyUUID uuid.UUID
 	if err := ginparamsmapper.GetPathParamFromContext("compagny_uuid", c, &compagnyUUID); err != nil {
@@ -121,6 +128,7 @@ func (h *CompagnyHandler) Put(c *gin.Context) {
 	c.JSON(http.StatusOK, "Compagny updated.")
 }
 
+// Delete parse the HTTP request in order to delete the requested Compagny.
 func (h *CompagnyHandler) Delete(c *gin.Context) {
 	var compagnyUUID uuid.UUID
 	if err := ginparamsmapper.GetPathParamFromContext("compagny_uuid", c, &compagnyUUID); err != nil {

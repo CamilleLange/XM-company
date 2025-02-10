@@ -6,6 +6,7 @@ import (
 	"github.com/Aloe-Corporation/mongodb"
 )
 
+// NewMongoDB use the config to create a *mongodb.Connector ready to be used.
 func NewMongoDB(config mongodb.Conf) (*mongodb.Connector, error) {
 	connector, err := mongodb.FactoryConnector(config)
 	if err != nil {

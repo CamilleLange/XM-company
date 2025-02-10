@@ -13,9 +13,11 @@ import (
 var (
 	_ iCompagnyRepository = (*compagnyRepository)(nil)
 
+	// ErrCompagnyNotFound indicates that the company was not found in the database.
 	ErrCompagnyNotFound = errors.New("company not found")
 )
 
+// CompagnyFeatures is the interface for the compagny's repository.
 type iCompagnyRepository interface {
 	Create(compagny Compagny) (uuid.UUID, error)
 	ReadByID(uuid uuid.UUID) (*Compagny, error)
@@ -25,16 +27,20 @@ type iCompagnyRepository interface {
 	Delete(uuid uuid.UUID) error
 }
 
+// compagnyRepository hold the *mongo.Collection, and do the database requests.
 type compagnyRepository struct {
 	compagny *mongo.Collection
 }
 
+// newCompagnyRepository is a factory method to create a new iCompagnyRepository.
 func newCompagnyRepository(compagny *mongo.Collection) iCompagnyRepository {
 	return &compagnyRepository{
 		compagny: compagny,
 	}
 }
 
+// Create the compagny in the database.
+// This function perform no checks of any kind.
 func (r *compagnyRepository) Create(compagny Compagny) (uuid.UUID, error) {
 	if _, err := r.compagny.InsertOne(context.Background(), compagny); err != nil {
 		return uuid.Nil, fmt.Errorf("can't create compagny : %w", err)
@@ -43,6 +49,7 @@ func (r *compagnyRepository) Create(compagny Compagny) (uuid.UUID, error) {
 	return compagny.UUID, nil
 }
 
+// ReadByID the requested compagny from the database.
 func (r *compagnyRepository) ReadByID(uuid uuid.UUID) (*Compagny, error) {
 	filter := bson.M{
 		"uuid": uuid,
@@ -56,6 +63,7 @@ func (r *compagnyRepository) ReadByID(uuid uuid.UUID) (*Compagny, error) {
 	return compagny, nil
 }
 
+// ReadByName the requested compagny from the database.
 func (r *compagnyRepository) ReadByName(name string) (*Compagny, error) {
 	filter := bson.M{
 		"name": name,
@@ -72,6 +80,7 @@ func (r *compagnyRepository) ReadByName(name string) (*Compagny, error) {
 	return compagny, nil
 }
 
+// ReadAll compagnies from the database.
 func (r *compagnyRepository) ReadAll() ([]Compagny, error) {
 	docs, err := r.compagny.Find(context.TODO(), bson.M{})
 	if err != nil {
@@ -91,6 +100,7 @@ func (r *compagnyRepository) ReadAll() ([]Compagny, error) {
 	return compagnies, nil
 }
 
+// Update the requested compagny in the database.
 func (r *compagnyRepository) Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) error {
 	filter := bson.M{
 		"uuid": uuid,
@@ -118,6 +128,7 @@ func (r *compagnyRepository) Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) 
 	return nil
 }
 
+// Delete the requested compagny from the database.
 func (r *compagnyRepository) Delete(uuid uuid.UUID) error {
 	filter := bson.M{
 		"uuid": uuid,

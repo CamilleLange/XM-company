@@ -3,12 +3,10 @@ package events
 import (
 	"fmt"
 
-	"github.com/Aloe-Corporation/logs"
 	"github.com/nats-io/nats.go"
 )
 
-var log = logs.Get()
-
+// Config struct of the event package.
 type Config struct {
 	NatsURL      string `yaml:"nats_url" mapstructure:"nats_url"`
 	NatsUsername string `yaml:"nats_username" mapstructure:"nats_username"`

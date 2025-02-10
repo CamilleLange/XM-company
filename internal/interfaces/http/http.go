@@ -11,10 +11,14 @@ import (
 )
 
 var (
-	log              = logs.Get()
+	// log is the singelton of the Zap logger.
+	log = logs.Get()
+
+	// ValidateInstance is the instance of the HTTP body structs validator.
 	ValidateInstance *validator.Validate
 )
 
+// Config struct of the http package.
 type Config struct {
 	GinMode         string `mapstructure:"gin_mode"`
 	Addr            string `mapstructure:"addr"`
@@ -22,6 +26,7 @@ type Config struct {
 	ShutdownTimeout int    `mapstructure:"shutdown_timeout"`
 }
 
+// NewRouter create a *gin.Engine ready to add handlers.
 func NewRouter(config Config) *gin.Engine {
 	ValidateInstance = validator.New()
 

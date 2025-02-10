@@ -22,6 +22,8 @@ var (
 type RunCallback func()
 type CloseCallback func() error
 
+// Launch use the provided config to set up the API for running.
+// This set up interfaces (datasources, http and event), shutdown operations, and finnaly launch the HTTP server.
 func Launch(config config.Config) (RunCallback, CloseCallback, error) {
 	mongo, err := datasources.NewMongoDB(config.Datasources.Mongo)
 	if err != nil {

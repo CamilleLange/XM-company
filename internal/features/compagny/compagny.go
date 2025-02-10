@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// CompagnyFeatures is the interface for the feature compagny.
 type CompagnyFeatures interface {
 	Create(compagny CompagnyCreateDTO) (uuid.UUID, error)
 	ReadByID(uuid uuid.UUID) (*CompagnyPublicDTO, error)
@@ -15,6 +16,7 @@ type CompagnyFeatures interface {
 	Delete(uuid uuid.UUID) error
 }
 
+// NewCompagnyFeatures is a factory method to create a new instance of the compagny feature.
 func NewCompagnyFeatures(connectorType string, connector any) (CompagnyFeatures, error) {
 	var compagnyRepo iCompagnyRepository
 

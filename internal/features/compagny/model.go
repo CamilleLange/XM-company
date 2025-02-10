@@ -9,8 +9,10 @@ const (
 	SoleProprietorship CompagnyType = "Sole Proprietorship"
 )
 
+// CompagnyType is an enum for the compagny type.
 type CompagnyType string
 
+// Compagny is the data model of the feature.
 type Compagny struct {
 	UUID            uuid.UUID    `json:"uuid" bson:"uuid"`
 	Name            string       `json:"name" bson:"name"`
@@ -20,6 +22,7 @@ type Compagny struct {
 	Type            CompagnyType `json:"type" bson:"type"`
 }
 
+// CompagnyPublicDTO is the public data model representation.
 type CompagnyPublicDTO struct {
 	Compagny
 }
@@ -34,6 +37,7 @@ func FactoryCompagnyPublicDTO(compagny *Compagny) *CompagnyPublicDTO {
 	}
 }
 
+// CompagnyCreateDTO is the data model representation to create compagny.
 type CompagnyCreateDTO struct {
 	Name            string `json:"name" validate:"required,max=15"`
 	Description     string `json:"description" validate:"max=3000"`
@@ -62,6 +66,7 @@ func FactoryCompagnyCreateDTO(compagny *Compagny) *CompagnyCreateDTO {
 	}
 }
 
+// CompagnyUpdateDTO is the data model representation to update compagny.
 type CompagnyUpdateDTO struct {
 	Name            string `json:"name" bson:"name" validate:"required,max=15"`
 	Description     string `json:"description" bson:"description" validate:"max=3000"`
@@ -90,6 +95,7 @@ func FactoryCompagnyUpdateDTO(compagny *Compagny) *CompagnyUpdateDTO {
 	}
 }
 
+// StringToCompagnyType convert a string to a CompagnyType
 func StringToCompagnyType(s string) CompagnyType {
 	var compagnyType CompagnyType
 	switch s {
