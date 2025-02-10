@@ -35,11 +35,11 @@ func FactoryCompagnyPublicDTO(compagny *Compagny) *CompagnyPublicDTO {
 }
 
 type CompagnyCreateDTO struct {
-	Name            string `json:"name"`
-	Description     string `json:"description"`
-	EmployeesNumber int    `json:"employees_number"`
-	Registered      bool   `json:"registered"`
-	Type            string `json:"type"`
+	Name            string `json:"name" validate:"required,max=15"`
+	Description     string `json:"description" validate:"max=3000"`
+	EmployeesNumber int    `json:"employees_number" validate:"required"`
+	Registered      *bool  `json:"registered" validate:"required"`
+	Type            string `json:"type" validate:"required"`
 }
 
 func (dto *CompagnyCreateDTO) ReverseCreateDTO() *Compagny {
@@ -47,7 +47,7 @@ func (dto *CompagnyCreateDTO) ReverseCreateDTO() *Compagny {
 		Name:            dto.Name,
 		Description:     dto.Description,
 		EmployeesNumber: dto.EmployeesNumber,
-		Registered:      dto.Registered,
+		Registered:      *dto.Registered,
 		Type:            StringToCompagnyType(dto.Type),
 	}
 }
@@ -57,17 +57,17 @@ func FactoryCompagnyCreateDTO(compagny *Compagny) *CompagnyCreateDTO {
 		Name:            compagny.Name,
 		Description:     compagny.Description,
 		EmployeesNumber: compagny.EmployeesNumber,
-		Registered:      compagny.Registered,
+		Registered:      &compagny.Registered,
 		Type:            string(compagny.Type),
 	}
 }
 
 type CompagnyUpdateDTO struct {
-	Name            string `json:"name"`
-	Description     string `json:"description"`
-	EmployeesNumber int    `json:"employees_number"`
-	Registered      bool   `json:"registered"`
-	Type            string `json:"type"`
+	Name            string `json:"name" bson:"name" validate:"required,max=15"`
+	Description     string `json:"description" bson:"description" validate:"max=3000"`
+	EmployeesNumber int    `json:"employees_number" bson:"employees_number" validate:"required"`
+	Registered      *bool  `json:"registered" bson:"registered" validate:"required"`
+	Type            string `json:"type" bson:"type" validate:"required"`
 }
 
 func (dto *CompagnyUpdateDTO) ReverseUpdateDTO() *Compagny {
@@ -75,7 +75,7 @@ func (dto *CompagnyUpdateDTO) ReverseUpdateDTO() *Compagny {
 		Name:            dto.Name,
 		Description:     dto.Description,
 		EmployeesNumber: dto.EmployeesNumber,
-		Registered:      dto.Registered,
+		Registered:      *dto.Registered,
 		Type:            StringToCompagnyType(dto.Type),
 	}
 }
@@ -85,7 +85,7 @@ func FactoryCompagnyUpdateDTO(compagny *Compagny) *CompagnyUpdateDTO {
 		Name:            compagny.Name,
 		Description:     compagny.Description,
 		EmployeesNumber: compagny.EmployeesNumber,
-		Registered:      compagny.Registered,
+		Registered:      &compagny.Registered,
 		Type:            string(compagny.Type),
 	}
 }

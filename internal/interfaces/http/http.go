@@ -23,6 +23,8 @@ type Config struct {
 }
 
 func NewRouter(config Config) *gin.Engine {
+	ValidateInstance = validator.New()
+
 	router := gin.New()
 	gin.SetMode(config.GinMode)
 

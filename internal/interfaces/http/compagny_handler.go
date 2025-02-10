@@ -36,7 +36,9 @@ func (h *CompagnyHandler) Post(c *gin.Context) {
 		return
 	}
 
-	if err := ValidateInstance.Struct(compagny); err != nil {
+	log.Debug("compagny", zap.Any("c", compagny))
+
+	if err := ValidateInstance.Struct(&compagny); err != nil {
 		log.Error("CompagnyHandler.Post fail :", zap.Error(err))
 		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid request body, data contains unsupported format.")
 		return

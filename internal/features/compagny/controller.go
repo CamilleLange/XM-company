@@ -21,7 +21,10 @@ func newCompagnyController(compagnyRepository iCompagnyRepository) *compagnyCont
 }
 
 func (c *compagnyController) Create(compagny CompagnyCreateDTO) (uuid.UUID, error) {
-	compagnyUUID, err := c.compagnyRepository.Create(compagny)
+	compagnyToCreate := compagny.ReverseCreateDTO()
+	compagnyToCreate.UUID = uuid.New()
+
+	compagnyUUID, err := c.compagnyRepository.Create(*compagnyToCreate)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("can't create compagny: %w", err)
 	}
