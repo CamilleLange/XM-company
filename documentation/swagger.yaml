@@ -1,0 +1,148 @@
+openapi: '3.0.3'
+info:
+  title: XM-company
+  version: '1.0'
+paths:
+  /company:
+    post:
+      description: "Create a company"
+      summary: "Create a company"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/post_company"
+      responses:
+        "200":
+          description: "a successfull response with the new company uuid"
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        "400":
+          description: "an error response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    get:
+      description: "An endpoint to get all companies"
+      summary: "An endpoint to get all companies"
+      responses:
+        "200":
+          description: "a successfull response with the companies"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/company"
+        "400":
+          description: "an error response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /company/:company_uuid:
+    parameters:
+      - in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      description: "An endpoint to get a company with it's uuid"
+      summary: "An endpoint to get a company with it's uuid"
+      responses:
+        "200":
+          description: "a successfull response with the company"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/company"
+        "400":
+          description: "an error response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      description: "Update a company"
+      summary: "Update a company"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/post_company"
+      responses:
+        "204":
+          description: "a successfull with no content"
+        "400":
+          description: "an error response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    delete:
+      description: "Delete a company"
+      summary: "Delete a company"
+      responses:
+        "204":
+          description: "a successfull with no content"
+        "400":
+          description: "an error response"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+components:
+  schemas:
+    company:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        employees_number:
+          type: number
+        registered:
+          type: boolean
+        type:
+          type: string
+          enum: ["Corporation", "Non Profit", "Cooperative", "Sole Proprietorship"]
+    post_company:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        employees_number:
+          type: number
+        registered:
+          type: boolean
+        type:
+          type: string
+          enum: ["Corporation", "Non Profit", "Cooperative", "Sole Proprietorship"]

@@ -125,7 +125,7 @@ func (h *CompanyHandler) Put(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, "Company updated.")
+	c.JSON(http.StatusNoContent, nil)
 }
 
 // Delete parse the HTTP request in order to delete the requested Company.
@@ -146,5 +146,5 @@ func (h *CompanyHandler) Delete(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusNoContent, "Company deleted.")
+	c.JSON(http.StatusNoContent, nil)
 }
