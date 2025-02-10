@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/CamilleLange/XM-company/internal/interfaces/events"
 	"github.com/google/uuid"
 )
 
@@ -14,12 +15,14 @@ var (
 // companyController is the controller of the feature.
 type companyController struct {
 	companyRepository iCompanyRepository
+	companyEvent      *events.CompanyEventHandler
 }
 
 // newCompanyController is a factory method to create the feature's controller.
-func newCompanyController(companyRepository iCompanyRepository) *companyController {
+func newCompanyController(companyRepository iCompanyRepository, companyEvent *events.CompanyEventHandler) *companyController {
 	return &companyController{
 		companyRepository: companyRepository,
+		companyEvent:      companyEvent,
 	}
 }
 
@@ -37,6 +40,11 @@ func (c *companyController) Create(company CompanyCreateDTO) (uuid.UUID, error) 
 	companyUUID, err := c.companyRepository.Create(*companyToCreate)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("can't create company: %w", err)
+	}
+
+	e := events.NewEvent(companyToCreate, events.CREATE)
+	if err := c.companyEvent.WriteMessage(e); err != nil {
+		return uuid.Nil, fmt.Errorf("can't send event : %w", err)
 	}
 
 	return companyUUID, nil
@@ -79,13 +87,31 @@ func (c *companyController) Update(uuid uuid.UUID, company CompanyUpdateDTO) err
 		return fmt.Errorf("can't update company: %w", err)
 	}
 
+	updatedCompany := company.ReverseUpdateDTO()
+	updatedCompany.UUID = uuid
+
+	e := events.NewEvent(updatedCompany, events.UPDATE)
+	if err := c.companyEvent.WriteMessage(e); err != nil {
+		return fmt.Errorf("can't send event : %w", err)
+	}
+
 	return nil
 }
 
 // Delete the company using it's uuid.
-func (c *companyController) Delete(uuid uuid.UUID) error {
-	if err := c.companyRepository.Delete(uuid); err != nil {
+func (c *companyController) Delete(u uuid.UUID) error {
+	if err := c.companyRepository.Delete(u); err != nil {
 		return fmt.Errorf("can't delete company: %w", err)
+	}
+
+	e := events.NewEvent(struct {
+		DeletedUUID uuid.UUID `json:"deleted_uuid"`
+	}{
+		DeletedUUID: u,
+	}, events.UPDATE)
+
+	if err := c.companyEvent.WriteMessage(e); err != nil {
+		return fmt.Errorf("can't send event : %w", err)
 	}
 
 	return nil

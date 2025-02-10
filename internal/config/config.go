@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/CamilleLange/XM-company/internal/interfaces/datasources"
+	"github.com/CamilleLange/XM-company/internal/interfaces/events"
 	"github.com/CamilleLange/XM-company/internal/interfaces/http"
 	"github.com/spf13/viper"
 )
@@ -12,6 +13,7 @@ import (
 // Config struct of the API.
 type Config struct {
 	Datasources datasources.Config `mapstructure:"datasources"`
+	Event       events.Config      `mapstructure:"events"`
 	Router      http.Config        `mapstructure:"router"`
 }
 

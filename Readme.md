@@ -14,21 +14,37 @@ You can build a Docker image for the API with `docker build -t xm-company:<your 
 
 ## Running the API  
 This API can be run in several ways.  
-
-### Locally  
+### Deployment
+#### Locally  
 You can run the project locally after building the binary with `XM_COMPANY_CONFIG=./config ./<binary name>` or directly with `go run main.go`. In both cases, the provided configuration file (`./config/config.yaml`) is used.  
 
-### Docker Image  
+#### Docker Image  
 You can use the Docker image built earlier with `docker run -e XM_COMPANY_CONFIG='.' xm-company:<your tag>`  
 The default configuration file is used. If you want to modify the configuration, refer to the `Configuration` section.  
 
-### Docker Compose  
-You can use the provided Docker Compose files to deploy the API and its services in `dev` or `staging` environments.  
+#### Docker Compose  
+You can use the provided Docker Compose files to deploy the API and its services in `dev` or `staging` environments.
 
-- For `dev`: `make deploy_dev`  
-- For `staging`: `make deploy_staging`  
+Both env are configured to be run immediatly.
+
+- For `dev`: `make deploy_dev` or `docker compose -f deployment/docker-compose-dev.yaml up -d --build`
+- For `staging`: `make deploy_staging` or `docker compose -f deployment/docker-compose-staging.yaml up -d --build`
 
 **NOTE:** For all the deployment methods mentioned, you can refer to the `Makefile`, which contains basic deployment operations.  
+
+### Dependencies
+This API depend on :
+- MongoDB
+- Kafka 
+
+#### Dependencies deployment
+You can deploy the dependencies of this API with provided docker-compose files in two environment : `dev` and `staging`.
+
+In `dev` env, you have to launch the API locally (see the according section `Deployment > Locally`).
+
+In `staging` env, everythink is packaged inside the same docker-compose file.
+
+**WARNING** : in both cases you **HAVE** to create manually the topic. (`kafka-ui` service is provided in both env and can be access with : [http://localhost:9000](http://localhost:9000))
 
 ## Configuration  
 This API is configured using a configuration file. The **directory** containing this configuration file must be specified in the environment variable `XM_COMPANY_CONFIG`.  
@@ -45,6 +61,10 @@ datasources:
     username: <username>
     password: <password>
     timeout: <number of seconds before connection timeout>
+
+events:
+    brocker_addr: <kafka hostname and port>
+    topic: <topic name>
 
 router:
   addr: <host of the API>
@@ -94,7 +114,7 @@ internal:
         datasources:
             <datasource connector>
         event:
-            <event connector>
+            <feature>_event_handler.go
         http:
             <feature>_handler.go
 .gitignore

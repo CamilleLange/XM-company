@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Aloe-Corporation/mongodb"
+	"github.com/CamilleLange/XM-company/internal/interfaces/events"
 	"github.com/google/uuid"
 )
 
@@ -17,7 +18,7 @@ type CompanyFeatures interface {
 }
 
 // NewCompanyFeatures is a factory method to create a new instance of the company feature.
-func NewCompanyFeatures(connectorType string, connector any) (CompanyFeatures, error) {
+func NewCompanyFeatures(connectorType string, connector any, companyEvent *events.CompanyEventHandler) (CompanyFeatures, error) {
 	var companyRepo iCompanyRepository
 
 	switch connectorType {
@@ -29,5 +30,5 @@ func NewCompanyFeatures(connectorType string, connector any) (CompanyFeatures, e
 		companyRepo = newCompanyRepository(db.Collection("company"))
 	}
 
-	return newCompanyController(companyRepo), nil
+	return newCompanyController(companyRepo, companyEvent), nil
 }

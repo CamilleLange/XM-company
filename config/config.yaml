@@ -7,6 +7,9 @@ datasources:
     password: root
     timeout: 10
 
+events:
+  brocker_addr: localhost:9094
+  topic: xm_company_api
 
 router:
   addr: ""

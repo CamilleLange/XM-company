@@ -56,7 +56,7 @@ func (r *companyRepository) ReadByID(uuid uuid.UUID) (*Company, error) {
 	}
 
 	company := new(Company)
-	if err := r.company.FindOne(context.TODO(), filter).Decode(company); err != nil {
+	if err := r.company.FindOne(context.Background(), filter).Decode(company); err != nil {
 		return nil, fmt.Errorf("can't find document : %w", err)
 	}
 
@@ -70,7 +70,7 @@ func (r *companyRepository) ReadByName(name string) (*Company, error) {
 	}
 
 	company := new(Company)
-	if err := r.company.FindOne(context.TODO(), filter).Decode(company); err != nil {
+	if err := r.company.FindOne(context.Background(), filter).Decode(company); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, ErrCompanyNotFound
 		}
@@ -82,14 +82,14 @@ func (r *companyRepository) ReadByName(name string) (*Company, error) {
 
 // ReadAll compagnies from the database.
 func (r *companyRepository) ReadAll() ([]Company, error) {
-	docs, err := r.company.Find(context.TODO(), bson.M{})
+	docs, err := r.company.Find(context.Background(), bson.M{})
 	if err != nil {
 		return nil, fmt.Errorf("can't find all document : %w", err)
 	}
 
 	compagnies := make([]Company, 0)
 
-	for docs.Next(context.TODO()) {
+	for docs.Next(context.Background()) {
 		company := new(Company)
 		if err := docs.Decode(&company); err != nil {
 			return nil, fmt.Errorf("can't decode document : %w", err)
@@ -116,7 +116,7 @@ func (r *companyRepository) Update(uuid uuid.UUID, company CompanyUpdateDTO) err
 		},
 	}
 
-	result, err := r.company.UpdateOne(context.TODO(), filter, update)
+	result, err := r.company.UpdateOne(context.Background(), filter, update)
 	if err != nil {
 		return fmt.Errorf("can't update document : %w", err)
 	}
@@ -134,7 +134,7 @@ func (r *companyRepository) Delete(uuid uuid.UUID) error {
 		"uuid": uuid,
 	}
 
-	if _, err := r.company.DeleteOne(context.TODO(), filter); err != nil {
+	if _, err := r.company.DeleteOne(context.Background(), filter); err != nil {
 		return fmt.Errorf("can't delete document : %w", err)
 	}
 
