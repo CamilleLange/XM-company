@@ -1,0 +1,22 @@
+version: '3'
+services:
+  xm_mongo:
+    image: mongo
+    restart: always
+    container_name: xm_mongo_dev
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root # TODO : change me. Use this for dev only 
+      MONGO_INITDB_ROOT_PASSWORD: root # TODO : change me. Use this for dev only 
+
+  
+
+  
+
+  
+
+  
+
+  
+  

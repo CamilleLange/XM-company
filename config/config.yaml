@@ -1,0 +1,15 @@
+datasources:
+  mongo:
+    db: xm_compagny
+    host: localhost
+    port: 27017
+    username: root
+    password: root
+    timeout: 10
+
+
+router:
+  addr: ""
+  port: 8080
+  gin_mode: debug
+  shutdown_timeout: 5
