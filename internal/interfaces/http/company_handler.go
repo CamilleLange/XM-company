@@ -40,23 +40,21 @@ func (h *CompanyHandler) RegisterRoutes(router *gin.Engine) {
 func (h *CompanyHandler) Post(c *gin.Context) {
 	var company company.CompanyCreateDTO
 	if err := c.ShouldBindJSON(&company); err != nil {
-		log.Error("CompanyHandler.Post fail", zap.Error(err))
-		c.JSON(http.StatusBadRequest, "Bad Request: can't parse request body")
+		log.Info("CompanyHandler.Post fail", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't parse request body"})
 		return
 	}
 
 	if err := ValidateInstance.Struct(&company); err != nil {
-		log.Error("CompanyHandler.Post fail :", zap.Error(err))
-		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid request body, data contains unsupported format.")
+		log.Warn("CompanyHandler.Post fail :", zap.Error(err))
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid request body, data contains unsupported format."})
 		return
 	}
 
 	companyUUID, err := h.companyFeatures.Create(company)
 	if err != nil {
-		log.Error("CompanyHandler.Post fail",
-			zap.Error(err),
-		)
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		log.Error("CompanyHandler.Post fail", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't create company"})
 		return
 	}
 
@@ -67,15 +65,15 @@ func (h *CompanyHandler) Post(c *gin.Context) {
 func (h *CompanyHandler) Get(c *gin.Context) {
 	var companyUUID uuid.UUID
 	if err := ginparamsmapper.GetPathParamFromContext("company_uuid", c, &companyUUID); err != nil {
-		log.Error("CompanyHandler.Get fail to get path param company_uuid:", zap.Error(err))
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		log.Info("CompanyHandler.Get fail to get path param company_uuid:", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't get path param company_uuid"})
 		return
 	}
 
 	company, err := h.companyFeatures.ReadByID(companyUUID)
 	if err != nil {
 		log.Error("CompanyHandler.Get fail to get company by ID:", zap.Error(err))
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't read company by uuid"})
 		return
 	}
 
@@ -86,10 +84,8 @@ func (h *CompanyHandler) Get(c *gin.Context) {
 func (h *CompanyHandler) GetAll(c *gin.Context) {
 	company, err := h.companyFeatures.ReadAll()
 	if err != nil {
-		log.Error("CompanyHandler.GetAll fail",
-			zap.Error(err),
-		)
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		log.Error("CompanyHandler.GetAll fail", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't read all companies"})
 		return
 	}
 
@@ -104,29 +100,27 @@ func (h *CompanyHandler) GetAll(c *gin.Context) {
 func (h *CompanyHandler) Put(c *gin.Context) {
 	var companyUUID uuid.UUID
 	if err := ginparamsmapper.GetPathParamFromContext("company_uuid", c, &companyUUID); err != nil {
-		log.Error("CompanyHandler.Put fail to get path param company_uuid:", zap.Error(err))
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		log.Info("CompanyHandler.Put fail to get path param company_uuid:", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't get path param company_uuid"})
 		return
 	}
 
 	var company company.CompanyUpdateDTO
 	if err := c.ShouldBindJSON(&company); err != nil {
-		log.Error("CompanyHandler.Put fail", zap.Error(err))
-		c.JSON(http.StatusBadRequest, "Bad Request: can't parse request body")
+		log.Info("CompanyHandler.Put fail", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't parse request body"})
 		return
 	}
 
 	if err := ValidateInstance.Struct(company); err != nil {
-		log.Error("CompanyHandler.Put fail :", zap.Error(err))
-		c.AbortWithStatusJSON(http.StatusBadRequest, "Invalid request body, data contains unsupported format.")
+		log.Warn("CompanyHandler.Put fail :", zap.Error(err))
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid request body, data contains unsupported format."})
 		return
 	}
 
 	if err := h.companyFeatures.Update(companyUUID, company); err != nil {
-		log.Error("CompanyHandler.Put fail",
-			zap.Error(err),
-		)
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		log.Error("CompanyHandler.Put fail", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't update company"})
 		return
 	}
 
@@ -137,17 +131,15 @@ func (h *CompanyHandler) Put(c *gin.Context) {
 func (h *CompanyHandler) Delete(c *gin.Context) {
 	var companyUUID uuid.UUID
 	if err := ginparamsmapper.GetPathParamFromContext("company_uuid", c, &companyUUID); err != nil {
-		log.Error("CompanyHandler.Delete fail to get path param company_uuid: ", zap.Error(err))
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		log.Info("CompanyHandler.Delete fail to get path param company_uuid: ", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't parse request body"})
 		return
 	}
 
 	err := h.companyFeatures.Delete(companyUUID)
 	if err != nil {
-		log.Error("CompanyHandler.Delete fail",
-			zap.Error(err),
-		)
-		c.JSON(http.StatusBadRequest, "Bad Request")
+		log.Error("CompanyHandler.Delete fail", zap.Error(err))
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can't update company"})
 		return
 	}
 

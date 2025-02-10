@@ -7,30 +7,92 @@
 	},
 	"item": [
 		{
-			"name": "Create",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"XM\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"Corporation\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Protected",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"XM\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"Corporation\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/company",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"company"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{base_url}}/company",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"company"
-					]
+				{
+					"name": "Update One",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"XM (updated)\",\r\n    \"description\": \"Xm is a company (updated)\",\r\n    \"employees_number\": 12,\r\n    \"registered\": false,\r\n    \"type\": \"Non Profit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/company/:uuid",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"company",
+								":uuid"
+							],
+							"variable": [
+								{
+									"key": "uuid",
+									"value": "{{company_uuid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/company/:uuid",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"company",
+								":uuid"
+							],
+							"variable": [
+								{
+									"key": "uuid",
+									"value": "{{company_uuid}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "Read All",
@@ -74,13 +136,13 @@
 			"response": []
 		},
 		{
-			"name": "Update One",
+			"name": "Login",
 			"request": {
-				"method": "PUT",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"XM (updated)\",\r\n    \"description\": \"Xm is a company (updated)\",\r\n    \"employees_number\": 12,\r\n    \"registered\": false,\r\n    \"type\": \"Non Profit\"\r\n}",
+					"raw": "{\r\n    \"username\" : \"test\",\r\n    \"password\" : \"test\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -88,43 +150,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/company/:uuid",
+					"raw": "{{base_url}}/login",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
-						"company",
-						":uuid"
-					],
-					"variable": [
-						{
-							"key": "uuid",
-							"value": "{{company_uuid}}"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete One",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{base_url}}/company/:uuid",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"company",
-						":uuid"
-					],
-					"variable": [
-						{
-							"key": "uuid",
-							"value": "{{company_uuid}}"
-						}
+						"login"
 					]
 				}
 			},
