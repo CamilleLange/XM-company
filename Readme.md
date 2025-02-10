@@ -106,3 +106,9 @@ main.go
 Makefile
 Readme.md
 ```
+
+## Integration testing
+
+You can use the Postman Flow to run integration tests : [Postman Flow](https://aloe-corp.postman.co/workspace/My-Workspace~c23b3208-facf-4932-8db8-dd4c47714ed9/flow/67a9dd828d573d003172fec7)
+
+In order to run this flow, please deploy locally the API using the `staging` docker-compose.
