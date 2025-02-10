@@ -2,6 +2,7 @@ package compagny
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -11,11 +12,14 @@ import (
 
 var (
 	_ iCompagnyRepository = (*compagnyRepository)(nil)
+
+	ErrCompagnyNotFound = errors.New("company not found")
 )
 
 type iCompagnyRepository interface {
 	Create(compagny Compagny) (uuid.UUID, error)
 	ReadByID(uuid uuid.UUID) (*Compagny, error)
+	ReadByName(name string) (*Compagny, error)
 	ReadAll() ([]Compagny, error)
 	Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) error
 	Delete(uuid uuid.UUID) error
@@ -46,6 +50,22 @@ func (r *compagnyRepository) ReadByID(uuid uuid.UUID) (*Compagny, error) {
 
 	compagny := new(Compagny)
 	if err := r.compagny.FindOne(context.TODO(), filter).Decode(compagny); err != nil {
+		return nil, fmt.Errorf("can't find document : %w", err)
+	}
+
+	return compagny, nil
+}
+
+func (r *compagnyRepository) ReadByName(name string) (*Compagny, error) {
+	filter := bson.M{
+		"name": name,
+	}
+
+	compagny := new(Compagny)
+	if err := r.compagny.FindOne(context.TODO(), filter).Decode(compagny); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, ErrCompagnyNotFound
+		}
 		return nil, fmt.Errorf("can't find document : %w", err)
 	}
 

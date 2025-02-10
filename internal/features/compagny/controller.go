@@ -1,6 +1,7 @@
 package compagny
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -23,6 +24,10 @@ func newCompagnyController(compagnyRepository iCompagnyRepository) *compagnyCont
 func (c *compagnyController) Create(compagny CompagnyCreateDTO) (uuid.UUID, error) {
 	compagnyToCreate := compagny.ReverseCreateDTO()
 	compagnyToCreate.UUID = uuid.New()
+
+	if !c.IsNameValid(compagny.Name) {
+		return uuid.Nil, fmt.Errorf("compagny name is invalid")
+	}
 
 	compagnyUUID, err := c.compagnyRepository.Create(*compagnyToCreate)
 	if err != nil {
@@ -56,6 +61,10 @@ func (c *compagnyController) ReadAll() ([]CompagnyPublicDTO, error) {
 }
 
 func (c *compagnyController) Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) error {
+	if !c.IsNameValid(compagny.Name) {
+		return fmt.Errorf("compagny name is invalid")
+	}
+
 	if err := c.compagnyRepository.Update(uuid, compagny); err != nil {
 		return fmt.Errorf("can't update compagny: %w", err)
 	}
@@ -69,4 +78,13 @@ func (c *compagnyController) Delete(uuid uuid.UUID) error {
 	}
 
 	return nil
+}
+
+func (c *compagnyController) IsNameValid(name string) bool {
+	previousCompagny, err := c.compagnyRepository.ReadByName(name)
+	if err != nil && !errors.Is(err, ErrCompagnyNotFound) {
+		return false
+	}
+
+	return previousCompagny == nil
 }
