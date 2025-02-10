@@ -11,19 +11,19 @@ import (
 )
 
 var (
-	_ iCompagnyRepository = (*companyRepository)(nil)
+	_ iCompanyRepository = (*companyRepository)(nil)
 
-	// ErrCompagnyNotFound indicates that the company was not found in the database.
-	ErrCompagnyNotFound = errors.New("company not found")
+	// ErrCompanyNotFound indicates that the company was not found in the database.
+	ErrCompanyNotFound = errors.New("company not found")
 )
 
-// CompagnyFeatures is the interface for the company's repository.
-type iCompagnyRepository interface {
-	Create(company Compagny) (uuid.UUID, error)
-	ReadByID(uuid uuid.UUID) (*Compagny, error)
-	ReadByName(name string) (*Compagny, error)
-	ReadAll() ([]Compagny, error)
-	Update(uuid uuid.UUID, company CompagnyUpdateDTO) error
+// CompanyFeatures is the interface for the company's repository.
+type iCompanyRepository interface {
+	Create(company Company) (uuid.UUID, error)
+	ReadByID(uuid uuid.UUID) (*Company, error)
+	ReadByName(name string) (*Company, error)
+	ReadAll() ([]Company, error)
+	Update(uuid uuid.UUID, company CompanyUpdateDTO) error
 	Delete(uuid uuid.UUID) error
 }
 
@@ -32,8 +32,8 @@ type companyRepository struct {
 	company *mongo.Collection
 }
 
-// newCompagnyRepository is a factory method to create a new iCompagnyRepository.
-func newCompagnyRepository(company *mongo.Collection) iCompagnyRepository {
+// newCompanyRepository is a factory method to create a new iCompanyRepository.
+func newCompanyRepository(company *mongo.Collection) iCompanyRepository {
 	return &companyRepository{
 		company: company,
 	}
@@ -41,7 +41,7 @@ func newCompagnyRepository(company *mongo.Collection) iCompagnyRepository {
 
 // Create the company in the database.
 // This function perform no checks of any kind.
-func (r *companyRepository) Create(company Compagny) (uuid.UUID, error) {
+func (r *companyRepository) Create(company Company) (uuid.UUID, error) {
 	if _, err := r.company.InsertOne(context.Background(), company); err != nil {
 		return uuid.Nil, fmt.Errorf("can't create company : %w", err)
 	}
@@ -50,12 +50,12 @@ func (r *companyRepository) Create(company Compagny) (uuid.UUID, error) {
 }
 
 // ReadByID the requested company from the database.
-func (r *companyRepository) ReadByID(uuid uuid.UUID) (*Compagny, error) {
+func (r *companyRepository) ReadByID(uuid uuid.UUID) (*Company, error) {
 	filter := bson.M{
 		"uuid": uuid,
 	}
 
-	company := new(Compagny)
+	company := new(Company)
 	if err := r.company.FindOne(context.TODO(), filter).Decode(company); err != nil {
 		return nil, fmt.Errorf("can't find document : %w", err)
 	}
@@ -64,15 +64,15 @@ func (r *companyRepository) ReadByID(uuid uuid.UUID) (*Compagny, error) {
 }
 
 // ReadByName the requested company from the database.
-func (r *companyRepository) ReadByName(name string) (*Compagny, error) {
+func (r *companyRepository) ReadByName(name string) (*Company, error) {
 	filter := bson.M{
 		"name": name,
 	}
 
-	company := new(Compagny)
+	company := new(Company)
 	if err := r.company.FindOne(context.TODO(), filter).Decode(company); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, ErrCompagnyNotFound
+			return nil, ErrCompanyNotFound
 		}
 		return nil, fmt.Errorf("can't find document : %w", err)
 	}
@@ -81,16 +81,16 @@ func (r *companyRepository) ReadByName(name string) (*Compagny, error) {
 }
 
 // ReadAll compagnies from the database.
-func (r *companyRepository) ReadAll() ([]Compagny, error) {
+func (r *companyRepository) ReadAll() ([]Company, error) {
 	docs, err := r.company.Find(context.TODO(), bson.M{})
 	if err != nil {
 		return nil, fmt.Errorf("can't find all document : %w", err)
 	}
 
-	compagnies := make([]Compagny, 0)
+	compagnies := make([]Company, 0)
 
 	for docs.Next(context.TODO()) {
-		company := new(Compagny)
+		company := new(Company)
 		if err := docs.Decode(&company); err != nil {
 			return nil, fmt.Errorf("can't decode document : %w", err)
 		}
@@ -101,7 +101,7 @@ func (r *companyRepository) ReadAll() ([]Compagny, error) {
 }
 
 // Update the requested company in the database.
-func (r *companyRepository) Update(uuid uuid.UUID, company CompagnyUpdateDTO) error {
+func (r *companyRepository) Update(uuid uuid.UUID, company CompanyUpdateDTO) error {
 	filter := bson.M{
 		"uuid": uuid,
 	}

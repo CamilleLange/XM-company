@@ -8,16 +8,16 @@ import (
 )
 
 var (
-	_ CompagnyFeatures = (*companyController)(nil)
+	_ CompanyFeatures = (*companyController)(nil)
 )
 
 // companyController is the controller of the feature.
 type companyController struct {
-	companyRepository iCompagnyRepository
+	companyRepository iCompanyRepository
 }
 
-// newCompagnyController is a factory method to create the feature's controller.
-func newCompagnyController(companyRepository iCompagnyRepository) *companyController {
+// newCompanyController is a factory method to create the feature's controller.
+func newCompanyController(companyRepository iCompanyRepository) *companyController {
 	return &companyController{
 		companyRepository: companyRepository,
 	}
@@ -26,7 +26,7 @@ func newCompagnyController(companyRepository iCompagnyRepository) *companyContro
 // Create use a DTO to create a company.
 // DTO fields validation must be done before.
 // This check if the company name already exist.
-func (c *companyController) Create(company CompagnyCreateDTO) (uuid.UUID, error) {
+func (c *companyController) Create(company CompanyCreateDTO) (uuid.UUID, error) {
 	companyToCreate := company.ReverseCreateDTO()
 	companyToCreate.UUID = uuid.New()
 
@@ -43,34 +43,34 @@ func (c *companyController) Create(company CompagnyCreateDTO) (uuid.UUID, error)
 }
 
 // ReadByID read the company with it's uuid.
-func (c *companyController) ReadByID(uuid uuid.UUID) (*CompagnyPublicDTO, error) {
+func (c *companyController) ReadByID(uuid uuid.UUID) (*CompanyPublicDTO, error) {
 	company, err := c.companyRepository.ReadByID(uuid)
 	if err != nil {
 		return nil, fmt.Errorf("can't read company by id: %w", err)
 	}
 
-	return FactoryCompagnyPublicDTO(company), nil
+	return FactoryCompanyPublicDTO(company), nil
 }
 
 // ReadAll read all compagnies.
-func (c *companyController) ReadAll() ([]CompagnyPublicDTO, error) {
+func (c *companyController) ReadAll() ([]CompanyPublicDTO, error) {
 	company, err := c.companyRepository.ReadAll()
 	if err != nil {
 		return nil, fmt.Errorf("can't read all company: %w", err)
 	}
 
-	var publicCompagny []CompagnyPublicDTO
+	var publicCompany []CompanyPublicDTO
 	for _, company := range company {
-		publicCompagny = append(publicCompagny, *FactoryCompagnyPublicDTO(&company))
+		publicCompany = append(publicCompany, *FactoryCompanyPublicDTO(&company))
 	}
 
-	return publicCompagny, nil
+	return publicCompany, nil
 }
 
 // Update use a DTO to update a company.
 // DTO fields validation must be done before.
 // This check if the company name already exist.
-func (c *companyController) Update(uuid uuid.UUID, company CompagnyUpdateDTO) error {
+func (c *companyController) Update(uuid uuid.UUID, company CompanyUpdateDTO) error {
 	if !c.isNameValid(company.Name) {
 		return fmt.Errorf("company name is invalid")
 	}
@@ -93,10 +93,10 @@ func (c *companyController) Delete(uuid uuid.UUID) error {
 
 // isNameValid ensure if the provided name can be use in a company.
 func (c *companyController) isNameValid(name string) bool {
-	previousCompagny, err := c.companyRepository.ReadByName(name)
-	if err != nil && !errors.Is(err, ErrCompagnyNotFound) {
+	previousCompany, err := c.companyRepository.ReadByName(name)
+	if err != nil && !errors.Is(err, ErrCompanyNotFound) {
 		return false
 	}
 
-	return previousCompagny == nil
+	return previousCompany == nil
 }

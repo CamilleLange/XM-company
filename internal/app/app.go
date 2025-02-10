@@ -30,14 +30,14 @@ func Launch(config config.Config) (RunCallback, CloseCallback, error) {
 		return nil, nil, fmt.Errorf("can't open connection to mongo : %w", err)
 	}
 
-	companyFeature, err := company.NewCompagnyFeatures("mongo", mongo)
+	companyFeature, err := company.NewCompanyFeatures("mongo", mongo)
 	if err != nil {
 		return nil, nil, fmt.Errorf("can't create company feature : %w", err)
 	}
 
 	router := ginhttp.NewRouter(config.Router)
 
-	companyHandlers := ginhttp.NewCompagnyHandler(companyFeature)
+	companyHandlers := ginhttp.NewCompanyHandler(companyFeature)
 	companyHandlers.RegisterRoutes(router)
 
 	addrGin := config.Router.Addr + ":" + strconv.Itoa(config.Router.Port)

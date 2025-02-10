@@ -5,16 +5,16 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-type CompagnyEventHandler struct {
-	companyFeatures company.CompagnyFeatures
+type CompanyEventHandler struct {
+	companyFeatures company.CompanyFeatures
 }
 
-func NewCompagnyEventHandler(companyFeatures company.CompagnyFeatures) *CompagnyEventHandler {
-	return &CompagnyEventHandler{
+func NewCompanyEventHandler(companyFeatures company.CompanyFeatures) *CompanyEventHandler {
+	return &CompanyEventHandler{
 		companyFeatures: companyFeatures,
 	}
 }
 
-func (h *CompagnyEventHandler) RegisterEvents(nats *nats.Conn) error {
+func (h *CompanyEventHandler) RegisterEvents(nats *nats.Conn) error {
 	return nil
 }
