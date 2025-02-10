@@ -1,4 +1,4 @@
-module github.com/CamilleLange/XM-compagny
+module github.com/CamilleLange/XM-company
 
 go 1.22.2
 

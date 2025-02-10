@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/Aloe-Corporation/logs"
-	"github.com/CamilleLange/XM-compagny/internal/config"
-	"github.com/CamilleLange/XM-compagny/internal/features/compagny"
-	"github.com/CamilleLange/XM-compagny/internal/interfaces/datasources"
-	ginhttp "github.com/CamilleLange/XM-compagny/internal/interfaces/http"
+	"github.com/CamilleLange/XM-company/internal/config"
+	"github.com/CamilleLange/XM-company/internal/features/company"
+	"github.com/CamilleLange/XM-company/internal/interfaces/datasources"
+	ginhttp "github.com/CamilleLange/XM-company/internal/interfaces/http"
 	"go.uber.org/zap"
 )
 
@@ -30,15 +30,15 @@ func Launch(config config.Config) (RunCallback, CloseCallback, error) {
 		return nil, nil, fmt.Errorf("can't open connection to mongo : %w", err)
 	}
 
-	compagnyFeature, err := compagny.NewCompagnyFeatures("mongo", mongo)
+	companyFeature, err := company.NewCompagnyFeatures("mongo", mongo)
 	if err != nil {
-		return nil, nil, fmt.Errorf("can't create compagny feature : %w", err)
+		return nil, nil, fmt.Errorf("can't create company feature : %w", err)
 	}
 
 	router := ginhttp.NewRouter(config.Router)
 
-	compagnyHandlers := ginhttp.NewCompagnyHandler(compagnyFeature)
-	compagnyHandlers.RegisterRoutes(router)
+	companyHandlers := ginhttp.NewCompagnyHandler(companyFeature)
+	companyHandlers.RegisterRoutes(router)
 
 	addrGin := config.Router.Addr + ":" + strconv.Itoa(config.Router.Port)
 	srv := &http.Server{

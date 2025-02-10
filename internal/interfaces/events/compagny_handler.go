@@ -1,17 +1,17 @@
 package events
 
 import (
-	"github.com/CamilleLange/XM-compagny/internal/features/compagny"
+	"github.com/CamilleLange/XM-company/internal/features/company"
 	"github.com/nats-io/nats.go"
 )
 
 type CompagnyEventHandler struct {
-	compagnyFeatures compagny.CompagnyFeatures
+	companyFeatures company.CompagnyFeatures
 }
 
-func NewCompagnyEventHandler(compagnyFeatures compagny.CompagnyFeatures) *CompagnyEventHandler {
+func NewCompagnyEventHandler(companyFeatures company.CompagnyFeatures) *CompagnyEventHandler {
 	return &CompagnyEventHandler{
-		compagnyFeatures: compagnyFeatures,
+		companyFeatures: companyFeatures,
 	}
 }
 

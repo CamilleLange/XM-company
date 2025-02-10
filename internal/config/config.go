@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/CamilleLange/XM-compagny/internal/interfaces/datasources"
-	"github.com/CamilleLange/XM-compagny/internal/interfaces/http"
+	"github.com/CamilleLange/XM-company/internal/interfaces/datasources"
+	"github.com/CamilleLange/XM-company/internal/interfaces/http"
 	"github.com/spf13/viper"
 )
 

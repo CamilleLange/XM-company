@@ -1,6 +1,6 @@
 datasources:
   mongo:
-    db: xm_compagny
+    db: xm_company
     host: localhost
     port: 27017
     username: root
@@ -11,5 +11,5 @@ datasources:
 router:
   addr: ""
   port: 8080
-  gin_mode: debug
+  gin_mode: release
   shutdown_timeout: 5

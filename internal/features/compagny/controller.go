@@ -1,4 +1,4 @@
-package compagny
+package company
 
 import (
 	"errors"
@@ -8,92 +8,92 @@ import (
 )
 
 var (
-	_ CompagnyFeatures = (*compagnyController)(nil)
+	_ CompagnyFeatures = (*companyController)(nil)
 )
 
-// compagnyController is the controller of the feature.
-type compagnyController struct {
-	compagnyRepository iCompagnyRepository
+// companyController is the controller of the feature.
+type companyController struct {
+	companyRepository iCompagnyRepository
 }
 
 // newCompagnyController is a factory method to create the feature's controller.
-func newCompagnyController(compagnyRepository iCompagnyRepository) *compagnyController {
-	return &compagnyController{
-		compagnyRepository: compagnyRepository,
+func newCompagnyController(companyRepository iCompagnyRepository) *companyController {
+	return &companyController{
+		companyRepository: companyRepository,
 	}
 }
 
-// Create use a DTO to create a compagny.
+// Create use a DTO to create a company.
 // DTO fields validation must be done before.
-// This check if the compagny name already exist.
-func (c *compagnyController) Create(compagny CompagnyCreateDTO) (uuid.UUID, error) {
-	compagnyToCreate := compagny.ReverseCreateDTO()
-	compagnyToCreate.UUID = uuid.New()
+// This check if the company name already exist.
+func (c *companyController) Create(company CompagnyCreateDTO) (uuid.UUID, error) {
+	companyToCreate := company.ReverseCreateDTO()
+	companyToCreate.UUID = uuid.New()
 
-	if !c.isNameValid(compagny.Name) {
-		return uuid.Nil, fmt.Errorf("compagny name is invalid")
+	if !c.isNameValid(company.Name) {
+		return uuid.Nil, fmt.Errorf("company name is invalid")
 	}
 
-	compagnyUUID, err := c.compagnyRepository.Create(*compagnyToCreate)
+	companyUUID, err := c.companyRepository.Create(*companyToCreate)
 	if err != nil {
-		return uuid.Nil, fmt.Errorf("can't create compagny: %w", err)
+		return uuid.Nil, fmt.Errorf("can't create company: %w", err)
 	}
 
-	return compagnyUUID, nil
+	return companyUUID, nil
 }
 
-// ReadByID read the compagny with it's uuid.
-func (c *compagnyController) ReadByID(uuid uuid.UUID) (*CompagnyPublicDTO, error) {
-	compagny, err := c.compagnyRepository.ReadByID(uuid)
+// ReadByID read the company with it's uuid.
+func (c *companyController) ReadByID(uuid uuid.UUID) (*CompagnyPublicDTO, error) {
+	company, err := c.companyRepository.ReadByID(uuid)
 	if err != nil {
-		return nil, fmt.Errorf("can't read compagny by id: %w", err)
+		return nil, fmt.Errorf("can't read company by id: %w", err)
 	}
 
-	return FactoryCompagnyPublicDTO(compagny), nil
+	return FactoryCompagnyPublicDTO(company), nil
 }
 
 // ReadAll read all compagnies.
-func (c *compagnyController) ReadAll() ([]CompagnyPublicDTO, error) {
-	compagny, err := c.compagnyRepository.ReadAll()
+func (c *companyController) ReadAll() ([]CompagnyPublicDTO, error) {
+	company, err := c.companyRepository.ReadAll()
 	if err != nil {
-		return nil, fmt.Errorf("can't read all compagny: %w", err)
+		return nil, fmt.Errorf("can't read all company: %w", err)
 	}
 
 	var publicCompagny []CompagnyPublicDTO
-	for _, compagny := range compagny {
-		publicCompagny = append(publicCompagny, *FactoryCompagnyPublicDTO(&compagny))
+	for _, company := range company {
+		publicCompagny = append(publicCompagny, *FactoryCompagnyPublicDTO(&company))
 	}
 
 	return publicCompagny, nil
 }
 
-// Update use a DTO to update a compagny.
+// Update use a DTO to update a company.
 // DTO fields validation must be done before.
-// This check if the compagny name already exist.
-func (c *compagnyController) Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) error {
-	if !c.isNameValid(compagny.Name) {
-		return fmt.Errorf("compagny name is invalid")
+// This check if the company name already exist.
+func (c *companyController) Update(uuid uuid.UUID, company CompagnyUpdateDTO) error {
+	if !c.isNameValid(company.Name) {
+		return fmt.Errorf("company name is invalid")
 	}
 
-	if err := c.compagnyRepository.Update(uuid, compagny); err != nil {
-		return fmt.Errorf("can't update compagny: %w", err)
-	}
-
-	return nil
-}
-
-// Delete the compagny using it's uuid.
-func (c *compagnyController) Delete(uuid uuid.UUID) error {
-	if err := c.compagnyRepository.Delete(uuid); err != nil {
-		return fmt.Errorf("can't delete compagny: %w", err)
+	if err := c.companyRepository.Update(uuid, company); err != nil {
+		return fmt.Errorf("can't update company: %w", err)
 	}
 
 	return nil
 }
 
-// isNameValid ensure if the provided name can be use in a compagny.
-func (c *compagnyController) isNameValid(name string) bool {
-	previousCompagny, err := c.compagnyRepository.ReadByName(name)
+// Delete the company using it's uuid.
+func (c *companyController) Delete(uuid uuid.UUID) error {
+	if err := c.companyRepository.Delete(uuid); err != nil {
+		return fmt.Errorf("can't delete company: %w", err)
+	}
+
+	return nil
+}
+
+// isNameValid ensure if the provided name can be use in a company.
+func (c *companyController) isNameValid(name string) bool {
+	previousCompagny, err := c.companyRepository.ReadByName(name)
 	if err != nil && !errors.Is(err, ErrCompagnyNotFound) {
 		return false
 	}

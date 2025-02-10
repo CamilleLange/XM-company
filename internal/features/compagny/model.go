@@ -1,4 +1,4 @@
-package compagny
+package company
 
 import "github.com/google/uuid"
 
@@ -9,7 +9,7 @@ const (
 	SoleProprietorship CompagnyType = "Sole Proprietorship"
 )
 
-// CompagnyType is an enum for the compagny type.
+// CompagnyType is an enum for the company type.
 type CompagnyType string
 
 // Compagny is the data model of the feature.
@@ -31,13 +31,13 @@ func (dto *CompagnyPublicDTO) ReversePublicDTO() *Compagny {
 	return &dto.Compagny
 }
 
-func FactoryCompagnyPublicDTO(compagny *Compagny) *CompagnyPublicDTO {
+func FactoryCompagnyPublicDTO(company *Compagny) *CompagnyPublicDTO {
 	return &CompagnyPublicDTO{
-		Compagny: *compagny,
+		Compagny: *company,
 	}
 }
 
-// CompagnyCreateDTO is the data model representation to create compagny.
+// CompagnyCreateDTO is the data model representation to create company.
 type CompagnyCreateDTO struct {
 	Name            string `json:"name" validate:"required,max=15"`
 	Description     string `json:"description" validate:"max=3000"`
@@ -56,17 +56,17 @@ func (dto *CompagnyCreateDTO) ReverseCreateDTO() *Compagny {
 	}
 }
 
-func FactoryCompagnyCreateDTO(compagny *Compagny) *CompagnyCreateDTO {
+func FactoryCompagnyCreateDTO(company *Compagny) *CompagnyCreateDTO {
 	return &CompagnyCreateDTO{
-		Name:            compagny.Name,
-		Description:     compagny.Description,
-		EmployeesNumber: compagny.EmployeesNumber,
-		Registered:      &compagny.Registered,
-		Type:            string(compagny.Type),
+		Name:            company.Name,
+		Description:     company.Description,
+		EmployeesNumber: company.EmployeesNumber,
+		Registered:      &company.Registered,
+		Type:            string(company.Type),
 	}
 }
 
-// CompagnyUpdateDTO is the data model representation to update compagny.
+// CompagnyUpdateDTO is the data model representation to update company.
 type CompagnyUpdateDTO struct {
 	Name            string `json:"name" bson:"name" validate:"required,max=15"`
 	Description     string `json:"description" bson:"description" validate:"max=3000"`
@@ -85,28 +85,28 @@ func (dto *CompagnyUpdateDTO) ReverseUpdateDTO() *Compagny {
 	}
 }
 
-func FactoryCompagnyUpdateDTO(compagny *Compagny) *CompagnyUpdateDTO {
+func FactoryCompagnyUpdateDTO(company *Compagny) *CompagnyUpdateDTO {
 	return &CompagnyUpdateDTO{
-		Name:            compagny.Name,
-		Description:     compagny.Description,
-		EmployeesNumber: compagny.EmployeesNumber,
-		Registered:      &compagny.Registered,
-		Type:            string(compagny.Type),
+		Name:            company.Name,
+		Description:     company.Description,
+		EmployeesNumber: company.EmployeesNumber,
+		Registered:      &company.Registered,
+		Type:            string(company.Type),
 	}
 }
 
 // StringToCompagnyType convert a string to a CompagnyType
 func StringToCompagnyType(s string) CompagnyType {
-	var compagnyType CompagnyType
+	var companyType CompagnyType
 	switch s {
 	case "Corporation":
-		compagnyType = Corporation
+		companyType = Corporation
 	case "Non Profit":
-		compagnyType = NonProfit
+		companyType = NonProfit
 	case "Cooperative":
-		compagnyType = Cooperative
+		companyType = Cooperative
 	case "Sole Proprietorship":
-		compagnyType = SoleProprietorship
+		companyType = SoleProprietorship
 	}
-	return compagnyType
+	return companyType
 }

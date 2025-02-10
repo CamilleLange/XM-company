@@ -6,12 +6,12 @@ import (
 	"syscall"
 
 	"github.com/Aloe-Corporation/logs"
-	"github.com/CamilleLange/XM-compagny/internal/app"
-	"github.com/CamilleLange/XM-compagny/internal/config"
+	"github.com/CamilleLange/XM-company/internal/app"
+	"github.com/CamilleLange/XM-company/internal/config"
 )
 
 const (
-	PREFIX_ENV          = "XM_COMPAGNY"
+	PREFIX_ENV          = "XM_COMPANY"
 	ENV_CONFIG          = PREFIX_ENV + "_CONFIG"
 	DEFAULT_PATH_CONFIG = "./config/"
 )

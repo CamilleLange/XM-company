@@ -1,4 +1,4 @@
-package compagny
+package company
 
 import (
 	"context"
@@ -11,78 +11,78 @@ import (
 )
 
 var (
-	_ iCompagnyRepository = (*compagnyRepository)(nil)
+	_ iCompagnyRepository = (*companyRepository)(nil)
 
 	// ErrCompagnyNotFound indicates that the company was not found in the database.
 	ErrCompagnyNotFound = errors.New("company not found")
 )
 
-// CompagnyFeatures is the interface for the compagny's repository.
+// CompagnyFeatures is the interface for the company's repository.
 type iCompagnyRepository interface {
-	Create(compagny Compagny) (uuid.UUID, error)
+	Create(company Compagny) (uuid.UUID, error)
 	ReadByID(uuid uuid.UUID) (*Compagny, error)
 	ReadByName(name string) (*Compagny, error)
 	ReadAll() ([]Compagny, error)
-	Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) error
+	Update(uuid uuid.UUID, company CompagnyUpdateDTO) error
 	Delete(uuid uuid.UUID) error
 }
 
-// compagnyRepository hold the *mongo.Collection, and do the database requests.
-type compagnyRepository struct {
-	compagny *mongo.Collection
+// companyRepository hold the *mongo.Collection, and do the database requests.
+type companyRepository struct {
+	company *mongo.Collection
 }
 
 // newCompagnyRepository is a factory method to create a new iCompagnyRepository.
-func newCompagnyRepository(compagny *mongo.Collection) iCompagnyRepository {
-	return &compagnyRepository{
-		compagny: compagny,
+func newCompagnyRepository(company *mongo.Collection) iCompagnyRepository {
+	return &companyRepository{
+		company: company,
 	}
 }
 
-// Create the compagny in the database.
+// Create the company in the database.
 // This function perform no checks of any kind.
-func (r *compagnyRepository) Create(compagny Compagny) (uuid.UUID, error) {
-	if _, err := r.compagny.InsertOne(context.Background(), compagny); err != nil {
-		return uuid.Nil, fmt.Errorf("can't create compagny : %w", err)
+func (r *companyRepository) Create(company Compagny) (uuid.UUID, error) {
+	if _, err := r.company.InsertOne(context.Background(), company); err != nil {
+		return uuid.Nil, fmt.Errorf("can't create company : %w", err)
 	}
 
-	return compagny.UUID, nil
+	return company.UUID, nil
 }
 
-// ReadByID the requested compagny from the database.
-func (r *compagnyRepository) ReadByID(uuid uuid.UUID) (*Compagny, error) {
+// ReadByID the requested company from the database.
+func (r *companyRepository) ReadByID(uuid uuid.UUID) (*Compagny, error) {
 	filter := bson.M{
 		"uuid": uuid,
 	}
 
-	compagny := new(Compagny)
-	if err := r.compagny.FindOne(context.TODO(), filter).Decode(compagny); err != nil {
+	company := new(Compagny)
+	if err := r.company.FindOne(context.TODO(), filter).Decode(company); err != nil {
 		return nil, fmt.Errorf("can't find document : %w", err)
 	}
 
-	return compagny, nil
+	return company, nil
 }
 
-// ReadByName the requested compagny from the database.
-func (r *compagnyRepository) ReadByName(name string) (*Compagny, error) {
+// ReadByName the requested company from the database.
+func (r *companyRepository) ReadByName(name string) (*Compagny, error) {
 	filter := bson.M{
 		"name": name,
 	}
 
-	compagny := new(Compagny)
-	if err := r.compagny.FindOne(context.TODO(), filter).Decode(compagny); err != nil {
+	company := new(Compagny)
+	if err := r.company.FindOne(context.TODO(), filter).Decode(company); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return nil, ErrCompagnyNotFound
 		}
 		return nil, fmt.Errorf("can't find document : %w", err)
 	}
 
-	return compagny, nil
+	return company, nil
 }
 
 // ReadAll compagnies from the database.
-func (r *compagnyRepository) ReadAll() ([]Compagny, error) {
-	docs, err := r.compagny.Find(context.TODO(), bson.M{})
+func (r *companyRepository) ReadAll() ([]Compagny, error) {
+	docs, err := r.company.Find(context.TODO(), bson.M{})
 	if err != nil {
 		return nil, fmt.Errorf("can't find all document : %w", err)
 	}
@@ -90,33 +90,33 @@ func (r *compagnyRepository) ReadAll() ([]Compagny, error) {
 	compagnies := make([]Compagny, 0)
 
 	for docs.Next(context.TODO()) {
-		compagny := new(Compagny)
-		if err := docs.Decode(&compagny); err != nil {
+		company := new(Compagny)
+		if err := docs.Decode(&company); err != nil {
 			return nil, fmt.Errorf("can't decode document : %w", err)
 		}
-		compagnies = append(compagnies, *compagny)
+		compagnies = append(compagnies, *company)
 	}
 
 	return compagnies, nil
 }
 
-// Update the requested compagny in the database.
-func (r *compagnyRepository) Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) error {
+// Update the requested company in the database.
+func (r *companyRepository) Update(uuid uuid.UUID, company CompagnyUpdateDTO) error {
 	filter := bson.M{
 		"uuid": uuid,
 	}
 
 	update := bson.M{
 		"$set": bson.M{
-			"name":             compagny.Name,
-			"description":      compagny.Description,
-			"employees_number": compagny.EmployeesNumber,
-			"registered":       compagny.Registered,
-			"type":             compagny.Type,
+			"name":             company.Name,
+			"description":      company.Description,
+			"employees_number": company.EmployeesNumber,
+			"registered":       company.Registered,
+			"type":             company.Type,
 		},
 	}
 
-	result, err := r.compagny.UpdateOne(context.TODO(), filter, update)
+	result, err := r.company.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		return fmt.Errorf("can't update document : %w", err)
 	}
@@ -128,13 +128,13 @@ func (r *compagnyRepository) Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) 
 	return nil
 }
 
-// Delete the requested compagny from the database.
-func (r *compagnyRepository) Delete(uuid uuid.UUID) error {
+// Delete the requested company from the database.
+func (r *companyRepository) Delete(uuid uuid.UUID) error {
 	filter := bson.M{
 		"uuid": uuid,
 	}
 
-	if _, err := r.compagny.DeleteOne(context.TODO(), filter); err != nil {
+	if _, err := r.company.DeleteOne(context.TODO(), filter); err != nil {
 		return fmt.Errorf("can't delete document : %w", err)
 	}
 

@@ -1,16 +1,16 @@
 version: '3'
 services:
-  xm_compagny:
-    image: xm-compagny:staging
+  xm_company:
+    image: xm-company:staging
     restart: always
-    container_name: xm_compagny_api_staging
+    container_name: xm_company_api_staging
     ports:
       - 8080:8080
     environment:
-      XM_COMPAGNY_CONFIG: /app
-      XM_COMPAGNY_DATASOURCES_MONGO_HOST: xm_mongo
-      XM_COMPAGNY_DATASOURCES_MONGO_USERNAME: 49L2ww2j7mo66chG7G
-      XM_COMPAGNY_DATASOURCES_MONGO_PASSWORD: wdF8V4x3qw946p486n
+      XM_COMPANY_CONFIG: /app
+      XM_COMPANY_DATASOURCES_MONGO_HOST: xm_mongo
+      XM_COMPANY_DATASOURCES_MONGO_USERNAME: 49L2ww2j7mo66chG7G
+      XM_COMPANY_DATASOURCES_MONGO_PASSWORD: wdF8V4x3qw946p486n
   xm_mongo:
     image: mongo
     restart: always

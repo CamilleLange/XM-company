@@ -1,4 +1,4 @@
-package compagny
+package company
 
 import (
 	"fmt"
@@ -7,18 +7,18 @@ import (
 	"github.com/google/uuid"
 )
 
-// CompagnyFeatures is the interface for the feature compagny.
+// CompagnyFeatures is the interface for the feature company.
 type CompagnyFeatures interface {
-	Create(compagny CompagnyCreateDTO) (uuid.UUID, error)
+	Create(company CompagnyCreateDTO) (uuid.UUID, error)
 	ReadByID(uuid uuid.UUID) (*CompagnyPublicDTO, error)
 	ReadAll() ([]CompagnyPublicDTO, error)
-	Update(uuid uuid.UUID, compagny CompagnyUpdateDTO) error
+	Update(uuid uuid.UUID, company CompagnyUpdateDTO) error
 	Delete(uuid uuid.UUID) error
 }
 
-// NewCompagnyFeatures is a factory method to create a new instance of the compagny feature.
+// NewCompagnyFeatures is a factory method to create a new instance of the company feature.
 func NewCompagnyFeatures(connectorType string, connector any) (CompagnyFeatures, error) {
-	var compagnyRepo iCompagnyRepository
+	var companyRepo iCompagnyRepository
 
 	switch connectorType {
 	case "mongo":
@@ -26,8 +26,8 @@ func NewCompagnyFeatures(connectorType string, connector any) (CompagnyFeatures,
 		if !castable {
 			return nil, fmt.Errorf("can't cast connector to mongo database")
 		}
-		compagnyRepo = newCompagnyRepository(db.Collection("compagny"))
+		companyRepo = newCompagnyRepository(db.Collection("company"))
 	}
 
-	return newCompagnyController(compagnyRepo), nil
+	return newCompagnyController(companyRepo), nil
 }
