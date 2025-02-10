@@ -16,3 +16,7 @@ router:
   port: 8080
   gin_mode: release
   shutdown_timeout: 5
+  auth:
+    jwt_key: j0Qm7uwnzxeS3UL6PNMQieXYO1XSU2l033U+2HggPw4=
+    username: test
+    password: test

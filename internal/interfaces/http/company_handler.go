@@ -24,11 +24,16 @@ func NewCompanyHandler(companyFeatures company.CompanyFeatures) *CompanyHandler 
 
 // RegisterRoutes for the CompanyHangler, provide a ready *gin.Engine.
 func (h *CompanyHandler) RegisterRoutes(router *gin.Engine) {
-	router.POST("/company", h.Post)
-	router.GET("/company/:company_uuid", h.Get)
+	// public endpoints.
 	router.GET("/company", h.GetAll)
-	router.PUT("/company/:company_uuid", h.Put)
-	router.DELETE("/company/:company_uuid", h.Delete)
+	router.GET("/company/:company_uuid", h.Get)
+
+	// Protected endpoints.
+	router.Group("/company").
+		Use(BasicJWTMiddleware()).
+		POST("", h.Post).
+		PUT("/:company_uuid", h.Put).
+		DELETE("/:company_uuid", h.Delete)
 }
 
 // Post parse the HTTP request in order to create the company.

@@ -9,6 +9,7 @@ require (
 	github.com/gin-contrib/zap v1.1.4
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.24.0
+	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/google/uuid v1.4.0
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/spf13/viper v1.19.0
