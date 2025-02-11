@@ -107,6 +107,11 @@ func StringToCompanyType(s string) CompanyType {
 		companyType = Cooperative
 	case "Sole Proprietorship":
 		companyType = SoleProprietorship
+
+	// This default is not mandatory, thanks to the default value of string.
+	// It's here to clarify logic.
+	default:
+		companyType = ""
 	}
 	return companyType
 }

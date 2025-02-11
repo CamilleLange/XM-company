@@ -37,6 +37,10 @@ func (c *companyController) Create(company CompanyCreateDTO) (uuid.UUID, error) 
 		return uuid.Nil, fmt.Errorf("company name is invalid")
 	}
 
+	if companyToCreate.Type == "" {
+		return uuid.Nil, fmt.Errorf("company type is invalid")
+	}
+
 	companyUUID, err := c.companyRepository.Create(*companyToCreate)
 	if err != nil {
 		return uuid.Nil, fmt.Errorf("can't create company: %w", err)
@@ -81,6 +85,10 @@ func (c *companyController) ReadAll() ([]CompanyPublicDTO, error) {
 func (c *companyController) Update(uuid uuid.UUID, company CompanyUpdateDTO) error {
 	if !c.isNameValid(company.Name) {
 		return fmt.Errorf("company name is invalid")
+	}
+
+	if StringToCompanyType(company.Type) == "" {
+		return fmt.Errorf("company type is invalid")
 	}
 
 	if err := c.companyRepository.Update(uuid, company); err != nil {

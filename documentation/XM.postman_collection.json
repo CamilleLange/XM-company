@@ -12,6 +12,16 @@
 				{
 					"name": "Create",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -33,11 +43,286 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"Corporation\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:04:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								}
+							],
+							"cookie": [],
+							"body": "\"bfe11200-f12e-4a2b-9684-c1b2f4208adb\""
+						},
+						{
+							"name": "Invalid company name (> 15 char)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"123456789101112131415\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"Corporation\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:05:32 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "Invalid description (>3000 char)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Description\",\r\n    \"description\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tristique ipsum non nulla accumsan, non sagittis tellus varius. Nunc tincidunt urna orci, vel porttitor sapien hendrerit non. Vivamus et lectus sed lectus malesuada sollicitudin. Pellentesque sollicitudin mattis justo, at tristique erat rhoncus at. Nunc tristique tristique leo quis consectetur. Proin eu leo molestie metus elementum ultricies non eu orci. Duis eu urna at augue convallis ultricies pharetra id elit. Nulla feugiat sagittis lorem. Fusce elementum a turpis mattis vulputate. Suspendisse efficitur in massa vel accumsan. Donec blandit, ex vel molestie dignissim, nunc metus sodales arcu, quis faucibus massa nisi at velit. Donec sed dui metus. Integer non commodo massa. In bibendum laoreet odio, sit amet vehicula dui vehicula a. Quisque augue nunc, lacinia nec orci vel, pellentesque pretium felis. Donec ut consequat dolor.Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla pulvinar dui ex, sed gravida nisi molestie id. Fusce id dictum nisl. Ut imperdiet dictum commodo. Nulla pretium ultrices nibh, et tristique est porta a. In fermentum ligula id aliquet molestie. Nulla volutpat bibendum metus, sed laoreet nibh rhoncus non. Etiam dolor purus, pharetra quis elit ut, placerat dapibus nisl. Maecenas elementum elit in magna commodo luctus. Morbi sit amet sem a nisi tincidunt dignissim. Fusce venenatis tincidunt nunc, eu convallis risus rutrum in. Morbi imperdiet, diam non viverra volutpat, felis nulla pharetra mi, varius semper ligula odio vitae dolor. Aliquam sed urna ac ipsum malesuada commodo. Phasellus convallis neque vitae iaculis sagittis. Aenean lacinia neque et arcu facilisis, nec consectetur ante tempus. Aliquam id imperdiet turpis.Donec elementum turpis eget ligula facilisis pretium. Duis consectetur elementum lectus, ac iaculis elit iaculis scelerisque. Aenean tortor ipsum, eleifend at rhoncus in, tincidunt tincidunt justo. Nam tincidunt semper nisl. Phasellus pretium justo in dignissim consequat. Pellentesque id nisi fringilla, elementum sapien et, tempor ligula. Cras vel justo ligula. Nulla gravida sapien vitae orci egestas interdum.Fusce eleifend sapien ac vulputate ultrices. Etiam vel tristique odio. Praesent imperdiet ante non laoreet dictum. Cras varius, nunc a placerat tristique, felis enim ullamcorper justo, ut porta libero sem sit amet risus. Mauris in accumsan dolor. Vivamus luctus viverra consectetur. Donec elit justo, tempus vel eleifend nec, commodo in lectus. Maecenas a mauris volutpat, venenatis arcu id, dictum leo. Vivamus maximus nisi eget orci congue laoreet. Integer eget commodo nulla. Aenean pretium, dui a gravida pharetra, neque quam scelerisque nisl, ut fermentum enim nisl et nisl.Fusce venenatis mattis gravida. Nullam vitae vulputate felis, vel posuere elit. Phasellus sed hendrerit leo. Nunc tristique arcu tellus, non tempus metus sagittis sed. Maecenas iaculis lorem velit. Nulla finibus dui vitae molestie lacinia. Sed scelerisque lobortis sapien quis sollicitudin. Aliquam dapibus ullamcorper tortor, nec semper quam pulvinar vitae. Morbi malesuada iaculis magna in ullamcorper. Integer placerat nisi at odio facilisis, in lacinia arcu pulvinar.Aenean efficitur eu tortor non viverra. Mauris at tincidunt neque. Quisque congue egestas erat sit amet lobortis. Phasellus non lacus vehicula, facilisis ipsum ut, lobortis lacus. Aenean sodales pulvinar odio, quis convallis leo ullamcorper et. Cras tellus.\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:11:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "No employee number",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Employee\",\r\n    \"description\": \"Xm is a company\",\r\n    \"registered\": true,\r\n    \"type\": \"Corporation\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:06:34 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "No registered",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Registered\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"type\": \"Corporation\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:07:03 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "Invalid company type",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Type\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:15:16 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"can't create company\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Update One",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [],
 						"body": {
@@ -66,11 +351,324 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM (updated)\",\r\n    \"description\": \"Xm is a company (updated)\",\r\n    \"employees_number\": 12,\r\n    \"registered\": false,\r\n    \"type\": \"Non Profit\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company/:uuid",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{company_uuid}}"
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:19:24 GMT"
+								}
+							],
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "Invalid company name (> 15 char)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"123456789101112131415\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"Corporation\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company/:uuid",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{company_uuid}}"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:20:14 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "Invalid description (> 3000 char)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Description\",\r\n    \"description\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tristique ipsum non nulla accumsan, non sagittis tellus varius. Nunc tincidunt urna orci, vel porttitor sapien hendrerit non. Vivamus et lectus sed lectus malesuada sollicitudin. Pellentesque sollicitudin mattis justo, at tristique erat rhoncus at. Nunc tristique tristique leo quis consectetur. Proin eu leo molestie metus elementum ultricies non eu orci. Duis eu urna at augue convallis ultricies pharetra id elit. Nulla feugiat sagittis lorem. Fusce elementum a turpis mattis vulputate. Suspendisse efficitur in massa vel accumsan. Donec blandit, ex vel molestie dignissim, nunc metus sodales arcu, quis faucibus massa nisi at velit. Donec sed dui metus. Integer non commodo massa. In bibendum laoreet odio, sit amet vehicula dui vehicula a. Quisque augue nunc, lacinia nec orci vel, pellentesque pretium felis. Donec ut consequat dolor.Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla pulvinar dui ex, sed gravida nisi molestie id. Fusce id dictum nisl. Ut imperdiet dictum commodo. Nulla pretium ultrices nibh, et tristique est porta a. In fermentum ligula id aliquet molestie. Nulla volutpat bibendum metus, sed laoreet nibh rhoncus non. Etiam dolor purus, pharetra quis elit ut, placerat dapibus nisl. Maecenas elementum elit in magna commodo luctus. Morbi sit amet sem a nisi tincidunt dignissim. Fusce venenatis tincidunt nunc, eu convallis risus rutrum in. Morbi imperdiet, diam non viverra volutpat, felis nulla pharetra mi, varius semper ligula odio vitae dolor. Aliquam sed urna ac ipsum malesuada commodo. Phasellus convallis neque vitae iaculis sagittis. Aenean lacinia neque et arcu facilisis, nec consectetur ante tempus. Aliquam id imperdiet turpis.Donec elementum turpis eget ligula facilisis pretium. Duis consectetur elementum lectus, ac iaculis elit iaculis scelerisque. Aenean tortor ipsum, eleifend at rhoncus in, tincidunt tincidunt justo. Nam tincidunt semper nisl. Phasellus pretium justo in dignissim consequat. Pellentesque id nisi fringilla, elementum sapien et, tempor ligula. Cras vel justo ligula. Nulla gravida sapien vitae orci egestas interdum.Fusce eleifend sapien ac vulputate ultrices. Etiam vel tristique odio. Praesent imperdiet ante non laoreet dictum. Cras varius, nunc a placerat tristique, felis enim ullamcorper justo, ut porta libero sem sit amet risus. Mauris in accumsan dolor. Vivamus luctus viverra consectetur. Donec elit justo, tempus vel eleifend nec, commodo in lectus. Maecenas a mauris volutpat, venenatis arcu id, dictum leo. Vivamus maximus nisi eget orci congue laoreet. Integer eget commodo nulla. Aenean pretium, dui a gravida pharetra, neque quam scelerisque nisl, ut fermentum enim nisl et nisl.Fusce venenatis mattis gravida. Nullam vitae vulputate felis, vel posuere elit. Phasellus sed hendrerit leo. Nunc tristique arcu tellus, non tempus metus sagittis sed. Maecenas iaculis lorem velit. Nulla finibus dui vitae molestie lacinia. Sed scelerisque lobortis sapien quis sollicitudin. Aliquam dapibus ullamcorper tortor, nec semper quam pulvinar vitae. Morbi malesuada iaculis magna in ullamcorper. Integer placerat nisi at odio facilisis, in lacinia arcu pulvinar.Aenean efficitur eu tortor non viverra. Mauris at tincidunt neque. Quisque congue egestas erat sit amet lobortis. Phasellus non lacus vehicula, facilisis ipsum ut, lobortis lacus. Aenean sodales pulvinar odio, quis convallis leo ullamcorper et. Cras tellus.\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company/:uuid",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{company_uuid}}"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:20:44 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "No employee number",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Employee\",\r\n    \"description\": \"Xm is a company\",\r\n    \"registered\": true,\r\n    \"type\": \"Corporation\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company/:uuid",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{company_uuid}}"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:21:07 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "No registered",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Registered\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"type\": \"Corporation\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company/:uuid",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{company_uuid}}"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:21:29 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"invalid request body, data contains unsupported format.\"\n}"
+						},
+						{
+							"name": "Invalid company type",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"XM-Invalid-Type\",\r\n    \"description\": \"Xm is a company\",\r\n    \"employees_number\": 42,\r\n    \"registered\": true,\r\n    \"type\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/company/:uuid",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"company",
+										":uuid"
+									],
+									"variable": [
+										{
+											"key": "uuid",
+											"value": "{{company_uuid}}"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Feb 2025 09:23:49 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "32"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"can't update company\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Delete One",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -142,7 +740,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\" : \"test\",\r\n    \"password\" : \"test\"\r\n}",
+					"raw": "{\r\n    \"username\" : \"Camille\",\r\n    \"password\" : \"Lange\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -193,6 +791,11 @@
 		{
 			"key": "company_uuid",
 			"value": "\"7523481e-8be2-44d6-a9ae-97d6c1b8c30d\"",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNhbWlsbGUiLCJleHAiOjE3MzkyMTI4NTB9.YRglE_NDkG59WJFOXvn-CtjegfTpLK0XpBhW4pvqLQM",
 			"type": "default"
 		}
 	]

@@ -42,7 +42,7 @@ You can use the Docker image built earlier with `docker run -e XM_COMPANY_CONFIG
 The default configuration file is used. If you want to modify the configuration, refer to the `Configuration` section.  
 
 ### Docker Compose  
-You can use the provided Docker Compose files to deploy the API and its services in `dev` or `staging` environments.
+You can use the provided Docker Compose files to deploy the API and its services in `dev` (this env is recommended for local or docker image deployments) or `staging` (to have all the services launch within the same docker-compose file) environments.
 
 Both env are configured to be run immediatly.
 
@@ -59,11 +59,11 @@ This API depend on :
 ### Dependencies deployment
 You can deploy the dependencies of this API with provided docker-compose files in two environment : `dev` and `staging`.
 
-In `dev` env, you have to launch the API locally (see the according section `Deployment > Locally`).
+In `dev` env, you have to launch the API locally (see the according section [Locally](#locally)).
 
 In `staging` env, everythink is packaged inside the same docker-compose file.
 
-**WARNING** : in both cases you **HAVE** to create manually the topic. (`kafka-ui` service is provided in both env and can be access with : [http://localhost:9000](http://localhost:9000))
+**WARNING** : in both cases you **HAVE** to create manually the topic. (`kafka-ui` service is provided in both env and can be access with : [http://localhost:9000](http://localhost:9000)). Name the topic with the same name as set up in the config file (or env variable).
 
 # Configuration  
 This API is configured using a configuration file. The **directory** containing this configuration file must be specified in the environment variable `XM_COMPANY_CONFIG`.  
@@ -115,6 +115,8 @@ This API is protected by JWT on some endpoints :
 In order to use the protected endpoint, you must obtain a JWT first.
 
 To do so, simply call the `POST /login` endpoint with the correct credentials (see the configuration file or the env var if you have deployed the API with docker-compose).
+
+When you have the JWT, follow the endpoints specifications to set up the correct header.
 
 **WARNING** : 
 
